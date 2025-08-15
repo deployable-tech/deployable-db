@@ -36,3 +36,45 @@ def add_chat_exchange(
 
 def list_chat_sessions(db: Session, user_id: str) -> List[ChatSession]:
     return db.query(ChatSession).filter(ChatSession.user_id == user_id).all()
+
+def update_chat_session(db: Session, session_id: str, **kwargs) -> ChatSession:
+    sess = get_chat_session(db, session_id)
+    if not sess:
+        return None
+    for key, value in kwargs.items():
+        setattr(sess, key, value)
+    db.commit()
+    db.refresh(sess)
+    return sess
+
+def delete_chat_session(db: Session, session_id: str) -> bool:
+    sess = get_chat_session(db, session_id)
+    if not sess:
+        return False
+    db.delete(sess)
+    db.commit()
+    return True
+
+def get_chat_exchange(db: Session, exchange_id: int) -> ChatExchange:
+    return db.query(ChatExchange).filter(ChatExchange.id == exchange_id).first()
+
+def list_chat_exchanges(db: Session, session_id: str) -> List[ChatExchange]:
+    return db.query(ChatExchange).filter(ChatExchange.session_id == session_id).all()
+
+def update_chat_exchange(db: Session, exchange_id: int, **kwargs) -> ChatExchange:
+    exch = get_chat_exchange(db, exchange_id)
+    if not exch:
+        return None
+    for key, value in kwargs.items():
+        setattr(exch, key, value)
+    db.commit()
+    db.refresh(exch)
+    return exch
+
+def delete_chat_exchange(db: Session, exchange_id: int) -> bool:
+    exch = get_chat_exchange(db, exchange_id)
+    if not exch:
+        return False
+    db.delete(exch)
+    db.commit()
+    return True
