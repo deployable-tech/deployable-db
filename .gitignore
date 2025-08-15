@@ -24,6 +24,7 @@ ENV/
 *.log
 *.tmp
 *.swp
+*.db
 .DS_Store
 Thumbs.db
 
