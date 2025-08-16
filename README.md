@@ -181,6 +181,27 @@ document_ops.delete_document(session, doc.id, delete_file=True)
 
 ---
 
+### 7. **LLMService & LLMModel**
+**Schema:** `schema/llm.py` (`LLMService`, `LLMModel`)
+
+**CRUD:**
+```python
+from db.data_access import llm_ops
+
+svc = llm_ops.create_service(session, "openai-prod", "openai", base_url="https://api.openai.com/v1", auth_ref="openai_key")
+model = llm_ops.create_model(session, svc.id, "gpt-4o", modality="chat", supports_tools=True)
+services = llm_ops.list_services(session)
+
+from db.invocation import InvocationParams
+payload = InvocationParams(
+    service_id=svc.id,
+    model_name="gpt-4o",
+    messages=[{"role": "user", "content": "Hello"}],
+    temperature=0.5,
+)
+```
+
+---
 ## 📌 Utility Reference
 
 ### `local_session(db_path=None)`
